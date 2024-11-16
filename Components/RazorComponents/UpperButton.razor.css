@@ -1,0 +1,11 @@
+﻿.items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 13vw;
+    height: 6vh;
+    background-color: #f0f0f0;
+    overflow: hidden;
+}

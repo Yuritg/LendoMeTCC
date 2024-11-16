@@ -1,0 +1,42 @@
+﻿@namespace Lendo_me
+
+<button class="items"
+        name="@Name"
+        style="background-color: @BackgroundColor;"
+        @onclick="HandleClick">
+    <img src="@ImageSource" />
+</button>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+
+    [Parameter]
+    public string BackgroundColor { get; set; } = "Black";
+
+    [Parameter]
+    public string ImageSource { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async Task HandleClick()
+    {
+        if (OnClick.HasDelegate)
+            await OnClick.InvokeAsync(Name);
+    }
+}
+
+<style>
+    .items {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid black;
+        border-radius: 10px;
+        width: 13vw;
+        height: 6vh;
+        background-color: #f0f0f0;
+        overflow: hidden;
+    }
+</style>

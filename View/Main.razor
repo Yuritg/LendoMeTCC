@@ -1,0 +1,62 @@
+﻿@page "/"
+@using Microsoft.Extensions.Localization
+@inject BoardService BoardService
+@inject MainViewModel ViewModel
+@inject IStringLocalizer<MainViewModel> Localizer
+
+<html lang="pt-BR" style="background-color: @ViewModel.BackgroundColor">
+<head>
+    <meta charset="UTF-8">
+    <title>Lendo-me App</title>
+    <style>
+        body {
+            background-color: @ViewModel.BackgroundColor !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-container">
+        <UpperButton Name="generalBook" BackgroundColor="#fcba03" OnClick="name => ViewModel.ButtonClickedCommand.Execute(name)" />
+        <UpperButton Name="bookOne" BackgroundColor="#68b531" OnClick="name => ViewModel.ButtonClickedCommand.Execute(name)" />
+        <UpperButton Name="bookTwo" BackgroundColor="#15b1e6" OnClick="name => ViewModel.ButtonClickedCommand.Execute(name)" />
+        <UpperButton Name="bookThree" BackgroundColor="#aa1be3" OnClick="name => ViewModel.ButtonClickedCommand.Execute(name)" />
+        <UpperButton Name="bookFour" BackgroundColor="#cf0c26" OnClick="name => ViewModel.ButtonClickedCommand.Execute(name)" />
+        <UpperButton Name="settings" BackgroundColor="White" ImageSource="Icons/settings.svg" OnClick="name => ViewModel.ButtonClickedCommand.Execute(name)" />
+
+        <div class="content-box">
+            @foreach (Board board in ViewModel.CurrentBoardList)
+            {
+                <CommunicationBoard Name="@board.Name" ImageSource="@board.ImageSource" />
+            }
+        </div>
+
+        @if (ViewModel.SettingsButtonWasClicked)
+        {
+            <SettingsModal IsVisible="true" OnClose="() => ViewModel.SettingsButtonWasClicked = false">
+                <BodyContent>
+                    <div class="modal-settings">
+                        <div class="modal-header">Configurações</div>
+
+                        <label for="language" class="label">Selecione o idioma</label>
+                        <select id="language" name="language" class="dropdown">
+                            <option value="pt">Português</option>
+                            <option value="en">Inglês</option>
+                            <option value="es">Espanhol</option>
+                        </select>
+
+                        <div class="settings-content">
+                            @foreach (Board board in BoardService.Boards)
+                            {
+                                <CommunicationBoard Name="@board.Name" ImageSource="@board.ImageSource" IsEdit="true"/>
+                            }
+                        </div>
+
+                        <button type="button" class="credits-btn">Créditos</button>
+                    </div>
+                </BodyContent>
+            </SettingsModal>
+        }
+    </div>
+</body>
+</html>

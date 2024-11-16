@@ -1,0 +1,144 @@
+﻿@namespace Lendo_me
+
+
+<div class="cboard-body">
+    <button class="cboard" name="@Name" @onclick="HandleClick">
+        <img src="@ImageSource" style="width: 95%; height: 95%; object-fit: cover;">
+    </button>
+
+    @if (isModalVisible is true && IsEdit is true)
+    {
+        <div class="edit-table">
+            <UpperButton Name="bookOne" BackgroundColor="#68b531" OnClick="name => AddRemoverItem(name.ToString())" />
+            <UpperButton Name="bookTwo" BackgroundColor="#15b1e6" OnClick="name => AddRemoverItem(name.ToString())" />
+            <UpperButton Name="bookThree" BackgroundColor="#aa1be3" OnClick="name => AddRemoverItem(name.ToString())" />
+            <UpperButton Name="bookFour" BackgroundColor="#cf0c26" OnClick="name => AddRemoverItem(name.ToString())" />
+        </div>
+    }
+</div>
+
+@if (isModalVisible is true && IsEdit is false)
+{
+    <div class="board-modal" @onclick="CloseModal">
+        <div class="board-content">
+            <h1>@Name</h1>
+            <img src="@ImageSource" alt="@Name" style="width: 100%; height: auto;">
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ImageSource { get; set; } = string.Empty;
+
+    [Parameter]
+    public string BackgroundColor { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool IsEdit { get; set; } = false;
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickEdit { get; set; }
+
+    private bool isModalVisible = false;
+
+
+    private async Task HandleClick()
+    {
+        isModalVisible = true;
+
+        if (OnClick.HasDelegate)
+            await OnClick.InvokeAsync(BackgroundColor);
+
+        if (OnClickEdit.HasDelegate)
+            await OnClickEdit.InvokeAsync(BackgroundColor);
+    }
+
+    private void CloseModal()
+    {
+        isModalVisible = false;
+    }
+
+    private void AddRemoverItem(string selectedSection)
+    {
+
+
+    }
+}
+
+<style>
+
+    .cboard-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .board-modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+    }
+
+
+    .board-content {
+        background-color: white;
+        border-radius: 5px;
+        width: 95%;
+        height: 95%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+        .board-content h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .board-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            bottom: 25%;
+            position: absolute;
+        }
+
+    .edit-table {
+        display: flex;
+        position: fixed;
+        width: 45vw;
+        height: 5vh;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1001;
+    }
+
+        .edit-table button {
+            margin-right: 5px;
+            height: 5vh;
+            width: 20vw;
+        }
+
+</style>
